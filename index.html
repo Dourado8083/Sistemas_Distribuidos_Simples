@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Chat Cliente</title>
+</head>
+
+<body>
+    <h1>Chat Cliente</h1>
+    <input type="text" id="messageInput" placeholder="Digite sua mensagem">
+    <button id="sendButton">Enviar</button>
+    <div id="messageContainer"></div>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:3000');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const messageContainer = document.getElementById('messageContainer');
+
+        socket.onopen = () => {
+            console.log('Conexão estabelecida com o servidor');
+        };
+
+        socket.onmessage = (event) => {
+            const message = event.data;
+            messageContainer.innerHTML += `<p>${message}</p>`;
+        };
+
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            socket.send(message);
+            messageInput.value = '';
+        });
+    </script>
+</body>
+
+</html>
